@@ -4,6 +4,7 @@ using System.Collections;
 public class PipeItemGeneral : PipeItem {
 
     private Transform rotater;
+    public float verticalPositionOffset = 0;
 
     void Awake()
     {
@@ -19,7 +20,7 @@ public class PipeItemGeneral : PipeItem {
         rotater.localRotation = Quaternion.Euler(ringRotation, 0f, 0f);
 
         Transform rotaterChild = rotater.GetChild(0); // the actual model of the item
-        rotaterChild.localPosition = new Vector3(0f, -pipeRadius); // push item to the wall
+        rotaterChild.localPosition = new Vector3(0f, -pipeRadius + verticalPositionOffset); // push item to the wall
     }
 }
 
