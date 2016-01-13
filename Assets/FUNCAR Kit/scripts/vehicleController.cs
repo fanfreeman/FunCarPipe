@@ -167,6 +167,7 @@ public class vehicleController : MonoBehaviour {
 		physicsBody.transform.position = (wheelLeftBack.transform.position + wheelLeftFront.transform.position + wheelRightBack.transform.position + wheelRightFront.transform.position)/4;
 		physicsBody.transform.rotation = transform.rotation;
 		transform.position = physicsBody.transform.position;
+        physicsBody.AddComponent<VehiclePhysicsController>();
 
 		//create a wheels holder
 		wheels = new GameObject(gameObject.name+" wheels");
@@ -653,7 +654,7 @@ public class vehicleController : MonoBehaviour {
 		{
 			y = (Mathf.Abs(zVel*0.2f))*-1f;
 		}
-		if(zVel < 0f)
+		if(zVel < 0f) // steer while backing up
 		{
 			y*=-1f;
 		}
@@ -673,14 +674,13 @@ public class vehicleController : MonoBehaviour {
 		float smooth = Vector3.Distance(transform.position,physicsBody.transform.position)*0.3f;
 		smooth = 0.1f + smooth*smooth;
 
-		transform.position = Vector3.Lerp(transform.position,physicsBody.transform.position,smooth);
-		transform.rotation = Quaternion.Lerp(transform.rotation,physicsBody.transform.rotation,smooth/2f);
-		transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x,physicsBody.transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z);
+        transform.position = Vector3.Lerp(transform.position, physicsBody.transform.position, smooth);
+        transform.rotation = Quaternion.Lerp(transform.rotation, physicsBody.transform.rotation, smooth / 2f);
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, physicsBody.transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
 
-		Quaternion goalRot = Quaternion.Euler(suspensionBody.transform.localEulerAngles - transform.localEulerAngles);
+        Quaternion goalRot = Quaternion.Euler(suspensionBody.transform.localEulerAngles - transform.localEulerAngles);
 		vehicleBody.transform.localRotation = Quaternion.Lerp(vehicleBody.transform.localRotation,goalRot,0.3f);
-
-	}
+    }
 	void LateUpdate()
 	{
 		wheels.transform.position = transform.position;
