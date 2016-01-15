@@ -93,7 +93,8 @@ public class vehicleController : MonoBehaviour {
 	private GameObject colRF;
 	private GameObject turnLF;
 	private GameObject turnRF;
-	
+    private bool isDestoryed;
+
 	[HideInInspector]
 	public float inputX;
 	private float inputY;
@@ -117,7 +118,8 @@ public class vehicleController : MonoBehaviour {
 	public bool roofOnGround = false;
 	private Vector3 defaultCOG;
 	private float boundSize = 1f;
-
+    [Header("Is current player's car")]
+    public bool isInPlayerControll;
 
 	#if UNITY_EDITOR
 	private void resetHorsepower()  
@@ -409,6 +411,8 @@ public class vehicleController : MonoBehaviour {
 		
 		xVel = 0f;
 		zVel = 0f;
+
+        isDestoryed = false;
 		
 		//prevent colliding with seams in ground//
 		Physics.defaultContactOffset = 0.001f;
@@ -416,6 +420,7 @@ public class vehicleController : MonoBehaviour {
 	
 	void Update()
 	{
+        if (isDestoryed) return;
 		//track how many tires are touching the ground//
 		tiresOnGround = 0;
 		FtiresOnGround = 0;
@@ -502,7 +507,7 @@ public class vehicleController : MonoBehaviour {
 		if(headlights)
 		{
 			//switch lights on/off by pressing L key//
-			if(Input.GetKeyDown(KeyCode.L))
+			if(Input.GetKeyDown(KeyCode.L) && isInPlayerControll)
 			{
 				if(headsON)
 				{
@@ -573,7 +578,7 @@ public class vehicleController : MonoBehaviour {
 		if(brakelights)
 		{
 			//braking//
-			if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+			if((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) && isInPlayerControll)
 			{
 				if(!brakesON)
 				{
@@ -601,9 +606,14 @@ public class vehicleController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
-		//input//
-		inputX = Input.GetAxis("Horizontal");
-		inputY = Input.GetAxis("Vertical");
+        if (isDestoryed) return;
+        //input//
+        if(isInPlayerControll)
+        {
+            inputX = Input.GetAxis("Horizontal");
+            inputY = Input.GetAxis("Vertical");
+        }
+
 		
 		//track velocity//
 		xVel = physicsBody.transform.InverseTransformDirection(rbody.velocity).x;
@@ -687,6 +697,11 @@ public class vehicleController : MonoBehaviour {
 		wheels.transform.rotation = transform.rotation;
 
 	}
+
+    public void SetToDestory()
+    {
+        isDestoryed = true;
+    }
 
 
 	//Vehicle Controller Script - Version 1.1 - Aaron Hibberd - 9.30.2015 - www.hibbygames.com//
