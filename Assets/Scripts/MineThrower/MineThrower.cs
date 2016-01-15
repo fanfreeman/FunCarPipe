@@ -8,11 +8,15 @@ public class MineThrower : CanBeShootOut {
     private bool fired = false;
     private float initSpeed = 50f;
 
+    public GameObject rotator;
+    public Transform rotatorMeshObj;
 
     // Use this for initialization
     void Awake()
     {
+        //phybody
         body = transform.GetChild(0);
+        rotatorMeshObj = rotator.transform.GetChild(0);
     }
 
 	// Update is called once per frame
@@ -28,6 +32,30 @@ public class MineThrower : CanBeShootOut {
 
         body.GetComponent<Rigidbody>().angularVelocity =
         selfRotation * 1.8f;
+    }
+
+
+    private float rotatorMeshObjZ = 1.25f;
+    private float rotatorMeshObjZSpeed = 24f;
+    private int factor = -1;
+    void Update()
+    {
+        MakeBombMoveCrazy();
+    }
+
+    private void MakeBombMoveCrazy()
+    {
+        rotator.transform.Rotate(Vector3.up *Time.deltaTime * 2000f);
+        if (rotatorMeshObjZ > 1.25f)
+        {
+            factor = -1;
+        }
+        if (rotatorMeshObjZ < -1.25f)
+        {
+            factor = 1;
+        }
+        rotatorMeshObjZ += rotatorMeshObjZSpeed*Time.deltaTime * factor;
+        rotatorMeshObj.transform.localPosition = new Vector3(0,0,rotatorMeshObjZ);
     }
 
     void FixedUpdate ()

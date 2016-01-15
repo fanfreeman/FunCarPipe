@@ -16,9 +16,7 @@ public class MineThrowerHitAndBoom : MonoBehaviour {
         foreach (Collider hit in colliders) {
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             Debug.Log("AddExplosionForce:"+hit.name);
-            CarExploderRigidbodyTrigger rBCarExploder
-                        = null;
-//                hit.transform.parent.GetComponent<CarExploderRigidbodyTrigger>();
+
             if(hit.transform.parent)
             {
                 if(hit.transform.parent.GetComponent<CarExploderRigidbodyTrigger>())
