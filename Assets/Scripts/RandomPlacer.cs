@@ -7,7 +7,7 @@ public class RandomPlacer : PipeItemGenerator {
 
     public override void GenerateItems(Pipe pipe)
     {
-        for (int i = 0; i < pipe.CurveSegmentCount; i+= 20)
+        for (int i = 0; i < pipe.CurveSegmentCount; i+= 4)
         {
             int pointer = Random.Range(0, itemPrefabs.Length);
             PipeItem item = Instantiate<PipeItem>(
